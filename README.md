@@ -4,7 +4,6 @@
 
 | Naam                 | GitHub gebruikersnaam                                         |
 |:---------------------|:--------------------------------------------------------------|
-| Timothy Williame     | [scoffir](https://github.com/scoffir)                         |
 | Dries Melkebeke      | [DriesMelkebeke](https://github.com/DriesMelkebeke)           |
 | Nick Heymans         | [HeymansNickk](https://github.com/HeymansNickk)               |
 | Michiel Vanreybrouck | [MichielVanreybrouck](https://github.com/MichielVanreybrouck) |
@@ -15,12 +14,12 @@
 
 | Taak                            | Realisatie             | Testen                 |
 |:--------------------------------|:-----------------------|:-----------------------|
-| Adres tabel, Subnetting, (SCCM) | Timothy Williame       | Wouter Borloo          |
+| Adres tabel, Subnetting, (SCCM) |        | Wouter Borloo          |
 | Netwerk                         | Wouter Borloo          | Dries Melkebeke        |
 | Domain Controller               | Dries Melkebeke        | Glenn Delanghe         |
 | DNS Server                      | Glenn Delanghe         | Michiel Vanreybrouck   |
 | Webserver                       | Michiel Vanreybrouck   | Nick Heymans           |
-| Email Server                    | Nick Heymans           | Timothy Williame       |
+| Email Server                    | Nick Heymans           |        |
 
 ## Documentatie
 
