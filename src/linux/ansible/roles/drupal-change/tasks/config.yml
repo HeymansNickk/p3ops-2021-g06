@@ -1,0 +1,65 @@
+# roles/wordpress/tasks/config.yml
+# Configures Wordpress
+---
+
+- name: Nginx config file for drupal
+  template:
+    src: drupal.conf
+    dest: "{{ drupal_nginx_configuration }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart nginx
+
+- name: Change ownership of drupal file
+  command: 'chown -R nginx: /var/www/drupal'
+
+- name: Php-fpm config files
+  copy: 
+    src: www.conf
+    dest: /etc/php-fpm.d/www.conf
+  notify: restart php-fpm
+
+- name: Copy drupal settings
+  copy:
+    src: settings.php
+    dest: /var/www/drupal/sites/default/settings.php
+
+- name: Set SE linux permission
+  command: 'setsebool -P httpd_can_network_connect_db 1'
+
+- name: Set SE linux permission
+  command: 'setsebool -P httpd_can_network_connect 1'
+
+- name: Create /var/www/drupal/sites/default/files
+  file:
+    path: /var/www/drupal/sites/default/files
+    state: directory
+
+- name: set proper ownership
+  file:
+    path: /var/www/drupal
+    owner: nginx
+    group: nginx
+    recurse: yes
+
+- name: Set SE linux permission
+  command: 'chcon -Rt public_content_rw_t /var/www/drupal/sites/default/files'
+
+- name: Set SE linux permission
+  command: 'setsebool -P allow_httpd_anon_write=1'
+
+- name: Set SE linux permission
+  command: 'chcon -Rt public_content_rw_t /var/www/drupal/sites/default/settings.php'  
+
+- name: set permissions on the settings file
+  file:
+    path: /var/www/drupal/sites/default/settings.php
+    mode: 0744
+
+- name: set permissions on files directory
+  file:
+    path: /var/www/drupal/sites/default/files
+    mode: 0777
+    state: directory
+    recurse: yes

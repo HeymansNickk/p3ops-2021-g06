@@ -1,0 +1,22 @@
+# roles/wordpress/vars/main.yml
+---
+drupal_packages:
+  - nginx
+  - php
+  - php-cli 
+  - php-xml
+  - php-curl
+  - php-zip
+  - php-mbstring
+  - php-mysqlnd
+  - php-pecl-json
+  - php-bcmath
+  - php-gd
+  - php-fpm
+  - php-opcache
+  - php-pgsql
+  - unzip       # for installing plugins
+
+drupal_directory: '/var/www/drupal'
+drupal_nginx_configuration: '/etc/nginx/conf.d/drupal.conf'
+drupal_php_configuration: '/etc/php-fpm.d/www.conf'

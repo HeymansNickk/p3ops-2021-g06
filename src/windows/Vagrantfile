@@ -1,0 +1,67 @@
+require 'yaml'
+
+# install missing vagrant plugin
+unless Vagrant.has_plugin?("vagrant-reload")
+  puts 'Installing vagrant-reload Plugin...'
+  system('vagrant plugin install vagrant-reload')
+end
+
+# - Configuration -----------------------------------------------------------
+common_config   = YAML.load_file(File.join(File.dirname(__FILE__), 'config/config.yml'))
+
+# general configuration
+var_default_password= common_config['general']['default_password']
+var_domain_name     = common_config['general']['domain_name']
+var_gateway_address = common_config['general']['gateway_address']
+var_dns             = common_config['general']['dns']
+var_public_dns1     = common_config['general']['public_dns1']
+
+# ad box configuration
+var_box             = common_config['domainController']['box']
+var_vm_name         = common_config['domainController']['vm_name']
+var_domain_mode     = common_config['domainController']['domain_mode']
+var_mem_size        = common_config['domainController']['mem_size']
+var_cpus            = common_config['domainController']['cpus']
+var_public_ip       = common_config['domainController']['public_ip']
+# - End of Configuration ----------------------------------------------------
+
+Vagrant.configure("2") do |config|
+# - Domain controller -------------------------------------------------------
+  config.vm.define var_vm_name do |cfg|
+    cfg.vm.box      = var_box
+    cfg.vm.hostname = var_vm_name
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    cfg.vm.network :private_network, ip: var_public_ip, gateway: var_gateway_address, dns: var_dns
+
+    # change memory size, cpus etc
+    cfg.vm.provider "virtualbox" do |v|
+      v.memory    = var_mem_size
+      v.cpus      = var_cpus
+    end
+
+    # use the plaintext WinRM transport and force it to use basic authentication.
+    # NB this is needed because the default negotiate transport stops working
+    #    after the domain controller is installed.
+    cfg.winrm.transport       = :plaintext
+    cfg.winrm.basic_auth_only = true
+    cfg.vm.communicator       = "winrm"
+
+    # Provision everything on the first run
+    cfg.vm.provision "shell" do |s|
+      s.path        = "scripts/01_install_ad.ps1"
+      s.privileged  = false
+      s.args        = [var_domain_name, var_domain_mode, var_public_ip, var_public_dns1, var_default_password]
+    end
+    
+    # reboot server after AD role deploy
+    cfg.vm.provision "shell", reboot: true
+    cfg.vm.provision "shell", path: "scripts/02_createOU.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/03_createUsers.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/04_policies.ps1", privileged: false
+    cfg.vm.provision "shell", path: "scripts/05_DFS.ps1", privileged: false
+
+  end
+end
+# --- EOF -------------------------------------------------------------------

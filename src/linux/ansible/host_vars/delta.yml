@@ -1,0 +1,75 @@
+# delta.yml
+---
+rhbase_install_packages:
+  - git
+  - vim
+  - mailx
+  - telnet 
+  - epel-release
+  - sssd 
+  - realmd 
+  - oddjob
+  - oddjob-mkhomedir
+  - adcli
+  - samba-common
+  - samba-common-tools
+  - krb5-workstation
+  - openldap-clients 
+
+rhbase_remove_packages:
+  - sendmail
+
+rhbase_selinux_booleans:
+  - antivirus_can_scan_system 
+
+rhbase_firewall_allow_services:
+  - imap
+  - imaps
+  - pop3
+  - pop3s
+  - smtp
+  - smtps
+  - smtp-submission
+  - http
+  - https
+
+rhbase_firewall_allow_ports:
+  - 587/tcp
+  - 465/tcp
+  - 110/tcp
+  - 143/tcp
+  
+
+rhbase_users:
+  - name: michiel
+    password: '$1$RigxC3EO$k4ePwLDA1QqSPPqOezYb60' #Vagrant
+    groups:
+      - vagrant
+  - name: glen
+    password: '$1$RigxC3EO$k4ePwLDA1QqSPPqOezYb60' #Vagrant
+    groups:
+      - vagrant
+
+postfix_myhostname: 'mail.CORONA2020.local'
+postfix_mydomain: 'CORONA2020.local'
+postfix_home_mailbox: 'MailDir/'
+postfix_myorigin: $postfix_mydomain
+postfix_inet_interfaces: 'all'
+postfix_mydestination: $postfix_myhostname,'localhost',$postfix_mydomain
+postfix_mynetwork: 192.100.100.192/27
+clamav_packages:
+  - clamav-server
+  - clamav-data
+  - clamav-update
+  - clamav-filesystem
+  - clamav
+  - clamav-scanner-systemd
+  - clamav-devel
+  - clamav-lib
+  - clamav-server-systemd
+postfix_ldap: false
+ldap_fqdn1: alfa.CORONA2020.local
+ldap_dcname: alfa
+ldap_domainname: CORONA2020
+ldap_root_domain: local
+ldap_ou: 

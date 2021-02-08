@@ -1,0 +1,1 @@
+https://developers.redhat.com/blog/2016/09/08/a-simple-guide-to-provisioning-vagrant-boxes-with-ansible/https://sysadmincasts.com/episodes/45-learning-ansible-with-vagrant-part-2-4 https://www.vagrantup.com/docs/provisioning/ansible.htmlhttps://docs.ansible.com/ansible/latest/scenario_guides/guide_vagrant.htmlhttps://docs.ansible.com/ansible/2.3/guide_vagrant.html

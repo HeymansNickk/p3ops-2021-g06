@@ -1,0 +1,64 @@
+# site.yml
+---
+# install cockpit monitoring
+- hosts: all
+  roles:
+    - bertvv.rh-base
+  tasks:
+    - name: install Cockpit
+      package:
+        name:
+          - cockpit
+          - cockpit-dashboard
+    - name: Ensure Cockpit is running
+      service:
+        name: cockpit.socket
+        state: started
+        enabled: true
+    - name: Allow traffic to Cockpit dashboard through the firewall
+      firewalld:
+        port: 9090/tcp
+        state: enabled
+        permanent: true
+
+- hosts: dns
+  become: true
+  roles:
+    - bertvv.rh-base
+    - bertvv.bind
+  # tasks:
+  #  - name: setting default gateway
+  #    shell: route add default gw 192.100.100.193
+  #  - name: setting secondary DNS address
+  #    shell: echo NAMESERVER=192.100.100.196 >> /etc/resolve.conf
+  #  - name: join domain 
+  #    shell: realm join CORONA2020.local --user=vagrant
+
+- hosts: mail
+  become: true
+  roles:
+    - bertvv.rh-base
+    - bertvv.mailserver
+  tasks:
+   - name: setting default gateway
+     shell: route add default gw 192.100.100.193
+   - name: setting primary DNS address
+     shell: echo NAMESERVER=192.100.100.195 >> /etc/resolve.conf
+   - name: setting secondary DNS address
+     shell: echo NAMESERVER=192.100.100.196 >> /etc/resolve.conf
+   - name: join domain 
+     shell: realm join CORONA2020.local --user=vagrant
+
+- hosts: charlie
+  become: true
+  roles:
+    - drupal-change
+    - geerlingguy.postgresql
+  tasks:
+   - name: setting default gateway
+     shell: route add default gw 192.100.100.193
+   - name: setting primary DNS address
+     shell: echo NAMESERVER=192.100.100.195 >> /etc/sysconfig/network-scripts/ifcfg-eth1
+   - name: setting secondary DNS address
+     shell: echo NAMESERVER=192.100.100.196 >> /etc/sysconfig/network-scripts/ifcfg-eth1
+

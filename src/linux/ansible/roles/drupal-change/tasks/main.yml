@@ -1,0 +1,13 @@
+# roles/wordpress/tasks/main.yml
+---
+
+- name: Include distribution-specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags: wordpress
+
+- name: Install Drupal
+  include_tasks: install.yml
+
+- name: Configure Drupal
+  include_tasks: config.yml
+  tags: wordpress

@@ -1,0 +1,35 @@
+# host_vars/golf.yml
+---
+rhbase_firewall_allow_ports: [53/tcp, 53/udp, 389/tcp, 389/udp, 137/tcp, 137/udp, 138/udp, 139/tcp, 3268/tcp, 1512/tcp, 1512/udp]
+
+bind_listen_ipv4: ['192.100.100.196']
+
+bind_allow_query: ['any']
+
+bind_zones:
+  # Example of a primary zone (hosts: and name_servers: ares defined)
+  - name: CORONA2020.local       # Domain name
+    type: secondary
+    allow_update: ['any']
+    create_reverse_zones: true  # Skip creation of reverse zones
+    primaries:
+      - 192.100.100.195                # Primary server(s) for this zone
+    name_servers:
+      - bravo
+      - golf
+    hosts:
+      - name: bravo
+        ip: 192.100.100.195
+        aliases:
+          - dns
+      - name: golf
+        ip: 192.100.100.196
+        # ipv6: 2001:db8::2
+        aliases:
+          - secDns
+      # - name: mydomain.net.
+      #   aliases:
+      #     - name: sub01
+      #       type: DNAME          # Example of a DNAME alias record
+    networks:
+      - '192.100.100'

@@ -1,0 +1,33 @@
+# roles/wordpress/tasks/install.yml
+---
+- name: Ensure Drupal packages are installed
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ drupal_packages }}"
+- name: Start php-fpm
+  systemd:
+    name: php-fpm
+    state: started
+    enabled: true
+  tags: php-fpm
+
+- name: Create /var/www
+  file:
+    path: /var/www
+    state: directory
+
+- name: Unarchive drupal
+  unarchive:
+    src: https://ftp.drupal.org/files/projects/drupal-8.7.3.tar.gz
+    dest: /var/www/
+    remote_src: yes
+
+- name: Status drupal-8.7.3
+  stat: path=/var/www/drupal-8.7.3
+  register: drupal_stat
+
+- name: Rename drupal
+  command: mv /var/www/drupal-8.7.3 /var/www/drupal
+  when: drupal_stat.stat.exists
+  #needs modification

@@ -1,0 +1,19 @@
+---
+#DNS-server
+- name: bravo
+  ip: 192.100.100.195
+  netmask: 255.255.255.224
+#DNS-server secundary
+- name: golf
+  ip: 192.100.100.196
+  netmask: 255.255.255.224
+#Web server
+- name: charlie
+  ip: 192.100.100.198
+  netmask: 255.255.255.224
+  memory: 2048
+#Email-server
+- name: delta
+  ip: 192.100.100.199
+  netmask: 255.255.255.224
+  memory: 2048

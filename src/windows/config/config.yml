@@ -1,0 +1,16 @@
+# General configuration
+general:
+  default_password: Vagrant123
+  domain_name: CORONA2020.local
+  gateway: 192.100.100.193
+  dns: 192.100.100.195
+  public_dns1: 192.100.100.195 
+
+# Configuration valid for Windows 2019 AD server
+domainController:
+  box: StefanScherer/windows_2019
+  vm_name: alfa
+  domain_mode: WinThreshold
+  mem_size: 4048
+  cpus: 3
+  public_ip: 192.100.100.194

@@ -1,0 +1,66 @@
+# host_vars/bravo.yml
+---
+rhbase_firewall_allow_ports: [53/tcp, 53/udp, 389/tcp, 389/udp, 137/tcp, 137/udp, 138/udp, 139/tcp, 3268/tcp, 1512/tcp, 1512/udp]
+
+bind_listen_ipv4: ['192.100.100.195']
+
+bind_allow_query: ['any']
+
+bind_zones:
+  # Example of a primary zone (hosts: and name_servers: ares defined)
+  - name: CORONA2020.local       # Domain name
+    type: primary
+    allow_update: ['any']
+    create_reverse_zones: true  # Skip creation of reverse zones
+    primaries:
+      - 192.100.100.195                # Primary server(s) for this zone
+    name_servers:
+      - bravo
+      - golf
+    hosts:
+      - name: alfa
+        ip: 192.100.100.194
+        # ipv6: 2001:db8::1
+        aliases:
+          - dc
+      - name: bravo
+        ip: 192.100.100.195
+        aliases:
+          - dns
+      - name: charlie
+        ip: 192.100.100.198
+        # ipv6: 2001:db8::2
+        aliases:
+          - www
+      - name: delta
+        ip: 192.100.100.199
+        # ipv6: 2001:db8::2
+        aliases:
+          - mail
+      - name: echo
+        ip: 192.100.100.200
+        # ipv6: 2001:db8::2
+        aliases:
+          - sccm
+      - name: golf
+        ip: 192.100.100.196
+        # ipv6: 2001:db8::2
+        aliases:
+          - secDns
+      - name: work             # This IP is in another subnet, will result in
+        ip: 192.100.100.0             #   multiple reverse zones
+      - name: guest
+        ip: 192.100.100.128
+      # - name: mydomain.net.
+      #   aliases:
+      #     - name: sub01
+      #       type: DNAME          # Example of a DNAME alias record
+    networks:
+      - '192.100.100'
+    mail_servers:
+      - name: delta
+        preference: 10
+    services:
+      - name: _ldap._tcp.dc._msdcs
+        target: alfa
+        port: 53

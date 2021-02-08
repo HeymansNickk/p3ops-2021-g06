@@ -1,0 +1,21 @@
+# charlie.yml
+---
+php_mysql_package:
+  - php-mysqlnd
+
+rhbase_install_packages:
+  - git
+  - vim
+
+rhbase_firewall_allow_services:
+  - http
+  - https
+
+postgresql_databases:
+  - name: drupal
+    owner: drupal
+postgresql_users:
+  - name: drupal
+    password: drupal
+
+php_enable_webserver: false
